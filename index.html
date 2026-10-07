@@ -3,77 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>KMA Email Signature Generator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 30px;
-      color: #333;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: #ffffff;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex;
-      gap: 30px;
-    }
-    .form-section { flex: 1; }
-    .preview-section {
-      flex: 1;
-      border-left: 2px solid #e0e0e0;
-      padding-left: 25px;
-      display: flex;
-      flex-direction: column;
-    }
-    h2 { color: #002B66; margin-top: 0; font-size: 20px; }
-    label { font-weight: bold; font-size: 12px; display: block; margin-top: 10px; color: #555; }
-    input[type="text"], input[type="email"], input[type="tel"] {
-      width: 100%;
-      padding: 8px 10px;
-      margin-top: 4px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-      font-size: 13px;
-    }
-    .preview-box {
-      border: 1px dashed #ccc;
-      padding: 15px;
-      background: #fafafa;
-      border-radius: 4px;
-      margin-top: 10px;
-      min-height: 250px;
-    }
-    .btn-copy {
-      background-color: #002B66;
-      color: #fff;
-      border: none;
-      padding: 12px 20px;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    .btn-copy:hover { background-color: #001f4d; }
-    .btn-update {
-      background-color: #198754;
-      color: #fff;
-      border: none;
-      padding: 10px 16px;
-      font-size: 13px;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    .btn-update:hover { background-color: #146c43; }
-    .alert { margin-top: 10px; color: green; font-weight: bold; font-size: 13px; display: none; }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -81,7 +11,7 @@
   <!-- FORM SECTION -->
   <div class="form-section">
     <h2>Employee Details</h2>
-    
+
     <label>Full Name</label>
     <input type="text" id="fullName" value="Jane Doe" oninput="updateSignature()">
 
@@ -120,58 +50,77 @@
   <!-- PREVIEW & COPY SECTION -->
   <div class="preview-section">
     <h2>Live Preview</h2>
-    <div class="preview-box" id="signatureContainer">
-      <table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; max-width: 500px;">
-        <tr>
-          <td style="padding-bottom: 10px; font-size: 14px; color: #000000;">
-            Kind Regards,
-          </td>
-        </tr>
-        
-        <!-- LOGO, DIVIDER, AND EMPLOYEE DETAILS -->
-        <tr>
-          <td style="width: 220px; padding: 0 24px 0 0; vertical-align: middle; border-right: 1px solid #222;">
-            <a href="https://www.kma.go.ke" target="_blank">
-              <img src="images/Picture5KMAlogo.png" alt="Kenya Maritime Authority" width="190" style="display: block; border: 0; outline: none;" />
-            </a>
-          </td>
-          <td style="padding: 0 0 0 24px; vertical-align: middle;">
-            <strong id="outName" style="color: #002B66; font-size: 14px;">Jane Doe</strong><br />
-            <span id="outTitle" style="font-style: italic; color: #555;">Communications Officer</span><br />
-            <span id="outDept">Corporate Communication Department</span><br />
-            <strong>Kenya Maritime Authority (KMA)</strong> Bahari Towers<br />
-            <strong>Tel:</strong> <span id="outPhone">+254 724319344</span>
-            <span id="outPoBox">P.O Box 95076-80104 Mombasa.</span><br />
-            <strong>Email:</strong> <a id="outEmailLink" href="mailto:communication@kma.go.ke" style="color: #0056b3; text-decoration: none;"><span id="outEmail">communication@kma.go.ke</span></a><br />
-            <br />
-            <strong>Website:</strong> <a href="https://www.kma.go.ke" target="_blank" style="color: #0056b3; text-decoration: none;">www.kma.go.ke</a><br />
 
-            <!-- Facebook Icon (Fixed image, dynamic href link) -->
-            <a id="outFb" href="#" target="_blank" style="text-decoration: none;">
-              <img src="images/Picture4facebook logo.png" alt="Facebook" width="20" height="20" style="display: inline-block; vertical-align: middle; border: 0;" />
-            </a>
-            <span style="color: #999999; margin: 0 6px; vertical-align: middle;">|</span>
-            
-            <!-- X Icon (Fixed image, dynamic href link) -->
-            <a id="outX" href="#" target="_blank" style="text-decoration: none;">
-              <img src="images/Picture3Xlogo.png" alt="X" width="20" height="20" style="display: inline-block; vertical-align: middle; border: 0;" />
-            </a>
-            <span style="color: #999999; margin: 0 6px; vertical-align: middle;">|</span>
-            
-            <!-- TikTok Icon (Fixed image, dynamic href link) -->
-            <a id="outTiktok" href="#" target="_blank" style="text-decoration: none;">
-              <img src="images/Picture2tiktoklogo.png" alt="TikTok" width="20" height="20" style="display: inline-block; vertical-align: middle; border: 0;" />
-            </a>
-            <span style="color: #999999; margin: 0 6px; vertical-align: middle;">|</span>
-            
-            <!-- Instagram Icon (Fixed image, dynamic href link) -->
-            <a id="outInsta" href="#" target="_blank" style="text-decoration: none;">
-              <img src="images/Picture1iglogo.png" alt="Instagram" width="20" height="20" style="display: inline-block; vertical-align: middle; border: 0;" />
-            </a>
-          </td>
-        </tr>
-      </table>
+    <!-- Dashed border wrapper (visual only — not copied) -->
+    <div class="preview-box">
+      <!-- Only the contents of this inner div get copied -->
+      <div id="signatureContainer">
+        <table cellpadding="0" cellspacing="0" border="0"
+               style="font-family: Arial, sans-serif; font-size: 13px; color: #333333; line-height: 1.4; max-width: 500px;">
+
+          <tr>
+            <td style="padding-bottom: 10px; font-size: 14px; color: #000000;">
+              Kind Regards,
+            </td>
+          </tr>
+
+          <tr>
+            <!-- Logo (with divider line to the right) -->
+            <td style="width: 220px; padding: 0 24px 0 0; vertical-align: middle; border-right: 1px solid #222;">
+              <a href="https://www.kma.go.ke" target="_blank">
+                <img src="https://mbaraks.github.io/kma-signature-assets/images/Picture5KMAlogo.png"
+                     alt="Kenya Maritime Authority"
+                     width="190"
+                     style="display: block; border: 0; outline: none;" />
+              </a>
+            </td>
+
+            <!-- Employee details -->
+            <td style="padding: 0 0 0 24px; vertical-align: middle;">
+              <strong id="outName" style="color: #002B66; font-size: 14px;">Jane Doe</strong><br />
+              <span id="outTitle" style="font-style: italic; color: #555;">Communications Officer</span><br />
+              <span id="outDept">Corporate Communication Department</span><br />
+              <strong>Kenya Maritime Authority (KMA)</strong> Bahari Towers<br />
+              <strong>Tel:</strong> <span id="outPhone">+254 724319344</span><br />
+              <span id="outPoBox">P.O Box 95076-80104 Mombasa.</span><br />
+              <strong>Email:</strong>
+              <a id="outEmailLink" href="mailto:communication@kma.go.ke"
+                 style="color: #0056b3; text-decoration: none;"><span id="outEmail">communication@kma.go.ke</span></a><br />
+              <br />
+              <strong>Website:</strong>
+              <a href="https://www.kma.go.ke" target="_blank"
+                 style="color: #0056b3; text-decoration: none;">www.kma.go.ke</a><br />
+
+              <!-- Social icons: left-aligned with the text column above -->
+              <div style="text-align: left; margin-top: 8px;">
+                <a id="outFb" href="#" target="_blank" style="text-decoration: none; margin-right: 10px;">
+                  <img src="https://mbaraks.github.io/kma-signature-assets/images/Picture4facebook%20logo.png"
+                       alt="Facebook" width="20" height="20"
+                       style="display: inline-block; vertical-align: middle; border: 0;" />
+                </a>
+                <a id="outX" href="#" target="_blank" style="text-decoration: none; margin-right: 10px;">
+                  <img src="https://mbaraks.github.io/kma-signature-assets/images/Picture3Xlogo.png"
+                       alt="X" width="20" height="20"
+                       style="display: inline-block; vertical-align: middle; border: 0;" />
+                </a>
+                <a id="outTiktok" href="#" target="_blank" style="text-decoration: none; margin-right: 10px;">
+                  <img src="https://mbaraks.github.io/kma-signature-assets/images/Picture2tiktoklogo.png"
+                       alt="TikTok" width="20" height="20"
+                       style="display: inline-block; vertical-align: middle; border: 0;" />
+                </a>
+                <a id="outInsta" href="#" target="_blank" style="text-decoration: none; margin-right: 10px;">
+                  <img src="https://mbaraks.github.io/kma-signature-assets/images/Picture1iglogo.png"
+                       alt="Instagram" width="20" height="20"
+                       style="display: inline-block; vertical-align: middle; border: 0;" />
+                </a>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- end #signatureContainer -->
     </div>
+    <!-- end .preview-box -->
 
     <button class="btn-copy" onclick="copySignature()">Copy Signature to Clipboard</button>
     <div id="alertMsg" class="alert">Signature copied! You can now paste (Ctrl+V) it into your email signature settings or email draft.</div>
@@ -186,18 +135,16 @@
   }
 
   function updateSignature() {
-    // Read Form Values
     document.getElementById('outName').innerText = document.getElementById('fullName').value;
     document.getElementById('outTitle').innerText = document.getElementById('jobTitle').value;
     document.getElementById('outDept').innerText = document.getElementById('department').value;
     document.getElementById('outPhone').innerText = document.getElementById('phone').value;
     document.getElementById('outPoBox').innerText = document.getElementById('poBox').value;
-    
+
     const email = document.getElementById('email').value;
     document.getElementById('outEmail').innerText = email;
     document.getElementById('outEmailLink').href = "mailto:" + email;
 
-    // Dynamically update link targets (href) while keeping image tags fixed
     document.getElementById('outFb').href = formatUrl(document.getElementById('fbUrl').value);
     document.getElementById('outX').href = formatUrl(document.getElementById('xUrl').value);
     document.getElementById('outTiktok').href = formatUrl(document.getElementById('tiktokUrl').value);
@@ -205,17 +152,21 @@
   }
 
   function copySignature() {
-    // Refresh the signature before copying so the latest client details are included.
+    // Refresh first so the latest form values are in the signature
     updateSignature();
+
+    // Copy ONLY the inner #signatureContainer (no dashed border wrapper)
     const container = document.getElementById('signatureContainer');
     const range = document.createRange();
-    range.selectNode(container);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
+    range.selectNodeContents(container); // contents only, not the node itself
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
 
     try {
       document.execCommand('copy');
-      window.getSelection().removeAllRanges();
+      selection.removeAllRanges();
       const alertMsg = document.getElementById('alertMsg');
       alertMsg.style.display = 'block';
       setTimeout(() => { alertMsg.style.display = 'none'; }, 4000);
