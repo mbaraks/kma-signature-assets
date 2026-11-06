@@ -41,14 +41,14 @@ input[type="text"], input[type="email"], input[type="tel"] {
 }
 
 /* OUTER wrapper carries the dashed border (never copied) */
-.preview-box {
+/*.preview-box {
   border: 1px dashed #ccc;
   padding: 15px;
   background: #fafafa;
   border-radius: 4px;
   margin-top: 10px;
   min-height: 250px;
-}
+}*/
 
 /* INNER container is what gets copied — no border here */
 #signatureContainer {
