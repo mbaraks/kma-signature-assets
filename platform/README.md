@@ -4,7 +4,7 @@ This application is being developed alongside the existing root-level KMA signat
 
 ## Stack
 
-- Next.js 15, React 19, TypeScript
+- Next.js 15.5, React 19, TypeScript
 - Supabase Auth and PostgreSQL
 - Supabase Row Level Security (RLS)
 - Zod is included for subsequent request/schema validation
@@ -13,7 +13,7 @@ This application is being developed alongside the existing root-level KMA signat
 
 1. Install Node.js 20.9 or newer.
 2. From this directory, run `npm install`.
-3. Copy `.env.example` to `.env.local` and set the Supabase project URL and anon key.
+3. Copy `.env.example` to `.env.local` and set the Supabase project URL and publishable key.
 4. Apply `supabase/migrations/0001_secure_multi_company_foundation.sql` to a new Supabase project after review.
 5. Provision the first organization and administrator through a trusted process; this migration intentionally creates neither a public signup route nor a default privileged account.
 6. Run `npm run dev`.
