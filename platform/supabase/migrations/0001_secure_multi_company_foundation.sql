@@ -1,6 +1,7 @@
 -- Company Email Signature Manager
 -- Phase 1: secure multi-company foundation.
--- Apply through the Supabase SQL editor or Supabase CLI after reviewing the target project.
+-- Internal authorization helpers live in an unexposed schema.
+-- Apply only after reviewing the target project and confirming Data API exposure settings.
 
 create extension if not exists pgcrypto;
 
@@ -59,8 +60,13 @@ create table public.audit_logs (
 create index audit_logs_org_created_idx
   on public.audit_logs(organization_id, created_at desc);
 
--- Security-definer helpers avoid recursive membership-table RLS evaluation.
-create or replace function public.is_active_org_member(target_org uuid)
+-- Private authorization helpers prevent recursive RLS checks on memberships.
+-- Keep this schema out of the Data API's exposed schemas.
+create schema if not exists private;
+revoke all on schema private from public, anon;
+grant usage on schema private to authenticated;
+
+create or replace function private.is_active_org_member(target_org uuid)
 returns boolean
 language sql
 stable
@@ -75,7 +81,7 @@ as $$
   );
 $$;
 
-create or replace function public.has_org_admin_role(target_org uuid)
+create or replace function private.has_org_admin_role(target_org uuid)
 returns boolean
 language sql
 stable
@@ -91,6 +97,11 @@ as $$
   );
 $$;
 
+revoke all on function private.is_active_org_member(uuid) from public, anon, authenticated;
+revoke all on function private.has_org_admin_role(uuid) from public, anon, authenticated;
+grant execute on function private.is_active_org_member(uuid) to authenticated;
+grant execute on function private.has_org_admin_role(uuid) to authenticated;
+
 alter table public.organizations enable row level security;
 alter table public.profiles enable row level security;
 alter table public.organization_memberships enable row level security;
@@ -98,7 +109,7 @@ alter table public.audit_logs enable row level security;
 
 create policy "members can view their organizations"
   on public.organizations for select to authenticated
-  using (public.is_active_org_member(id));
+  using ((select private.is_active_org_member(id)));
 
 create policy "users can view their own profile"
   on public.profiles for select to authenticated
@@ -115,30 +126,32 @@ create policy "members can view memberships in their organizations"
   on public.organization_memberships for select to authenticated
   using (
     user_id = (select auth.uid())
-    or public.has_org_admin_role(organization_id)
+    or (select private.has_org_admin_role(organization_id))
   );
-create policy "organization admins can add memberships"
-  on public.organization_memberships for insert to authenticated
-  with check (public.has_org_admin_role(organization_id));
-create policy "organization admins can update memberships"
-  on public.organization_memberships for update to authenticated
-  using (public.has_org_admin_role(organization_id))
-  with check (public.has_org_admin_role(organization_id));
-create policy "organization admins can remove memberships"
-  on public.organization_memberships for delete to authenticated
-  using (public.has_org_admin_role(organization_id));
 
 create policy "organization admins can view audit logs"
   on public.audit_logs for select to authenticated
-  using (public.has_org_admin_role(organization_id));
+  using ((select private.has_org_admin_role(organization_id)));
 
--- No client-side UPDATE/DELETE policy exists for audit_logs: entries are immutable
--- to ordinary authenticated users. Trusted server-side jobs can append via service role.
+-- Authenticated clients cannot create, change, or delete memberships.
+-- A trusted server-side provisioning path using the service role must do so.
+-- This prevents self-promotion and tenant-role escalation through direct API calls.
+
 grant usage on schema public to authenticated;
 grant select on public.organizations to authenticated;
-grant select, insert, update on public.profiles to authenticated;
-grant select, insert, update, delete on public.organization_memberships to authenticated;
+grant select, insert on public.profiles to authenticated;
+grant update (display_name) on public.profiles to authenticated;
+grant select on public.organization_memberships to authenticated;
 grant select on public.audit_logs to authenticated;
 
--- Deliberately no public signup, no default organization, and no seeded admin account.
--- Provision the first organization administrator through a trusted, audited admin process.
+-- Trusted server-side provisioning and audit writes only. Never expose the
+-- service-role key to a browser or NEXT_PUBLIC_ environment variable.
+grant select, insert, update, delete on
+  public.organizations,
+  public.profiles,
+  public.organization_memberships,
+  public.audit_logs
+to service_role;
+
+-- Deliberately no public signup, no default organization, and no seeded admin.
+-- Provision the first organization administrator through a trusted, audited process.
