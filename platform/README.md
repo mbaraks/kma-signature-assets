@@ -17,7 +17,7 @@ This application is being developed alongside the existing root-level KMA signat
 4. Apply `supabase/migrations/0001_secure_multi_company_foundation.sql` to a new Supabase project after review.
 5. Apply the remaining numbered migrations in order. They tighten table grants and add supporting indexes.
 6. Provision the first organization and administrator through a trusted process; the migrations intentionally create neither a public signup route nor a default privileged account.
-6. Run `npm run dev`.
+7. Run `npm run dev`.
 
 ## Security notes
 
